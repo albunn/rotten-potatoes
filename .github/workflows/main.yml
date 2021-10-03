@@ -34,3 +34,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PWD }}
           # Log out from the Docker registry at the end of a job
           logout: true
+          
+      - name: Docker Build and push
+        uses: docker/build-push-action@v2.7.0
+        with:
+          context: ./src
+          file: .src/Dockerfile
+          push: true
+          tags: |
+            alexandrebunn/rotten-potatoes:latest
+            alexandrebunn/rotten-potatoes:${{ github.run_number }}
