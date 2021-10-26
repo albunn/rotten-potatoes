@@ -1,0 +1,38 @@
+version: '3.8'
+
+volumes:
+  mongorotten_vol:
+
+networks:
+  rottenpotatoes_net:
+    driver: bridge
+
+services:
+  api:
+    image: alexandrebunn/rotten-potatoes:v1
+    ports:
+      - 5000:5000
+    networks:
+      - rottenpotatoes_net
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_DB: admin
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: mongouser
+      MONGODB_PASSWORD: mongopwd
+
+  mongodb:
+    image: mongo:4.4.3
+    container_name: mongorotten
+    ports:
+      - 27017:27017
+    networks:
+      - rottenpotatoes_net
+    volumes:
+      - mongorotten_vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+      MONGO_INITDB_ROOT_DATABASE: admin
